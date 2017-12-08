@@ -9,32 +9,6 @@
   service:
     name: mongod
     state: started
-  
-#- name: copy initRS script
-  #template: 
-    #src: initRS.j2
-    #dest: /tmp/initRS.js
-  #when: inventory_hostname == groups["{{ groupname }}"][0]
-  
-#- debug:
-    #msg: "{{ groups }}"
-    
-#- debug:
-    #msg: groups
-#- debug:
-    #msg: "{{ groupname }}"
-#- debug:
-    #msg: "{{ groups[ groupname ][0] }}"
-    
-#- debug:
-    #msg: "{{inventory_hostname}}"
-    
-#- debug:
-    #msg: "{{ groups[\"mongod\"] }}"
-    
-#- debug:
-    #msg: "{{item|int}}"
-  #with_sequence: start=0 end={{count*replicas}} stride={{replicas}}
     
 - name: copy initRS script
   run_once: true
@@ -54,7 +28,6 @@
   run_once: true
   delegate_to: "{{groups[\"mongod\"][item|int]}}"
   template: src=addMembers.j2 dest=/tmp/addMembers.js
-#  when: inventory_hostname == groups["{{ groupname }}"][0]
   with_sequence: start=0 end={{(count*replicas) - 1}} stride={{replicas}}
   when: replicas > 1
 
@@ -62,6 +35,5 @@
   run_once: true
   delegate_to: "{{groups[\"mongod\"][item|int]}}"
   shell: mongo < /tmp/addMembers.js
-#  when: inventory_hostname == groups["{{ groupname }}"][0]
   with_sequence: start=0 end={{(count*replicas) - 1}} stride={{replicas}}
   when: replicas > 1

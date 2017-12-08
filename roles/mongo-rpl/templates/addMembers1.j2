@@ -1,5 +1,0 @@
-{% for item in groups["mongod"] %}
-{% if item != groups["mongod"][0] %}
-rs.add("{{ item }}:27017");
-{% endif %}
-{% endfor %}
