@@ -15,10 +15,11 @@
   gather_facts: false
   tasks:
     - name: Wait for system to become reachable
-      pause:
-        minutes: 2
-      #wait_for_connection:
-        #delay: 60
+      #pause:
+      #  minutes: 2
+      wait_for:
+        port: 22
+        delay: 15
         #timeout: 300
 
 - hosts: all
