@@ -1,0 +1,28 @@
+---
+- name: create instances
+  ec2:
+    region: us-west-2
+    exact_count: "{{ count }}"
+    image: "ami-0def3275"
+    key_name: sh_key
+    group: chatfuel
+    instance_type: t2.micro
+    wait: true
+    count_tag:
+      - name: mongo
+      - group: "{{ groupname }}"
+    instance_tags:
+      name: mongo
+      group: "{{ groupname }}"
+  register: ec2
+
+- name: show
+  debug:
+    msg: "{{ ec2 }}"
+        
+- name: Add all instance public IPs to host group
+  add_host: hostname={{ item.public_ip }} groups={{ groupname }}
+  with_items: "{{ ec2.tagged_instances }}"
+- name: Add all instance public IPs to host group
+  add_host: hostname={{ item.public_ip }} groups={{ groupname }}
+  with_items: "{{ ec2.instances }}"

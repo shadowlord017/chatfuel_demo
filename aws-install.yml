@@ -1,0 +1,54 @@
+---
+# file aws-install.yml
+- hosts: localhost
+  name: Provision AWS EC2 instances
+  connection: local
+  gather_facts: false
+  roles:
+    - { role: aws, groupname: mongod, count: "{{ shard_count * replica_count }}" }
+    #- { role: aws, groupname: mongos, count: 1 }
+    
+- hosts: all
+  name: wait boot
+  user: ubuntu
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Wait for system to become reachable
+      pause:
+        minutes: 2
+      #wait_for_connection:
+        #delay: 60
+        #timeout: 300
+
+- hosts: all
+  name: Bootstrap VMs
+  user: ubuntu
+  become: true
+  gather_facts: false
+  roles:
+    - bootstrap
+    
+- hosts: all
+  name: Setup VMs
+  user: ubuntu
+  become: true
+  gather_facts: true
+  roles:
+    - mongodb
+
+- hosts: mongod
+  name: Create Replica sets
+  user: ubuntu
+  become: true
+  gather_facts: true
+  roles:
+    - { role: mongo-rpl, count: "{{ shard_count }}", replicas: "{{ replica_count }}" }
+
+#- hosts: mongos
+  #name: Create Sharded set
+  #user: ubuntu
+  #become: true
+  #gather_facts: true
+  #roles:
+    #- { role: mongos }

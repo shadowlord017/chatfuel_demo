@@ -1,0 +1,3 @@
+{% for cnt in range((item|int + 1), (replicas|int + item|int)) %}
+rs.add("{{ groups['mongod'][cnt] }}:27017");
+{% endfor %}

@@ -1,0 +1,18 @@
+---
+# roles/bootstrap/tasks/main.yml
+- name: check has yum
+  raw: test -e /usr/bin/yum
+  register: has_yum
+  ignore_errors: true
+- name: check has apt
+  raw: test -e /usr/bin/apt
+  register: has_apt
+  ignore_errors: true
+- debug:
+    msg: "{{has_yum}}"
+- debug:
+    msg: "{{has_apt}}"
+- include: redhat.yml
+  when: has_yum is defined and has_yum.failed == false
+- include: debian.yml
+  when: has_apt is defined and has_apt.failed == false
