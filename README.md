@@ -11,6 +11,9 @@ create AWS security group and grant ssh access (22 port)
 
 region, key, group, AMI image id - all connected
 
+# Description:
+Данный плейбук создает набор реплик и включает шардирование
+Не включает в себя создание и шардирование конкретных баз.
 
 ## TODO:
 - Добавить авторизацию и ограничения доступа в Mongo

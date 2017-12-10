@@ -1,7 +1,4 @@
 ---
-#- name: Create data directory for mongos
-#  file: path=/var/lib/mongodb/mongos state=directory owner=mongodb group=mongodb
-
 - name: Create the mongos startup file
   template: src=mongos.service.j2 dest=/etc/systemd/system/mongos.service mode=0655
 

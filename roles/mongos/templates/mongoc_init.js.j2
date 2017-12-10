@@ -3,7 +3,7 @@ rs.initiate(
     _id: "mongoc",
     configsvr: true,
     members: [
-      { _id : 0, host: "127.0.0.1:{{config_port}}" },
+      { _id : 0, host: "{{ groups['mongos'][0] }}:{{config_port}}" },
     ]
   }
 )
