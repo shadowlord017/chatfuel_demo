@@ -1,15 +1,11 @@
 systemLog:
   destination: file
-  path: "/var/log/mongo/mongos.log"
+  path: "/var/log/mongodb/mongos.log"
   logAppend: true
 
 net:
   port: {{ mongos_port }}
   bindIp: 0.0.0.0
 
-storage:
-  dbPath: /var/lib/mongodb/mongos
-
 sharding:
-   chunkSize: {{ mongos_chunk_size }}
    configDB: "mongoc/127.0.0.1:{{ config_port }}"
