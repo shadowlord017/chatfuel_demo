@@ -4,5 +4,6 @@ shard_count: 1
 # Number of replicas (include master) for each shard
 replica_count: 1
 
-# Chunksize for shards in MB
-mongos_chunk_size: 1
+# AWS params
+aws_groupname: chatfuel
+aws_keyname: sh_key

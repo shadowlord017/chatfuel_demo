@@ -4,8 +4,8 @@
     region: us-west-2
     exact_count: "{{ count }}"
     image: "ami-0def3275"
-    key_name: sh_key
-    group: chatfuel
+    key_name: "{{ aws_keyname }}"
+    group: "{{ aws_groupname }}"
     instance_type: t2.micro
     wait: true
     count_tag:
