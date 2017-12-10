@@ -1,2 +1,5 @@
 ---
-- name: 
+- name: Setup mongo config
+  include: mongoc.yml
+- name: Setup mongos
+  include: mongos.yml

@@ -1,0 +1,3 @@
+{% for host in groups.mongod %}
+  sh.addShard("{{host}}/{{host}}:27017");
+{% endfor %}

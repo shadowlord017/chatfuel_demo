@@ -6,7 +6,7 @@
   gather_facts: false
   roles:
     - { role: aws, groupname: mongod, count: "{{ shard_count * replica_count }}" }
-    #- { role: aws, groupname: mongos, count: 1 }
+    - { role: aws, groupname: mongos, count: 1 }
     
 - hosts: all
   name: wait boot
@@ -15,11 +15,11 @@
   gather_facts: false
   tasks:
     - name: Wait for system to become reachable
-      #pause:
-      #  minutes: 2
-      wait_for:
-        port: 22
-        delay: 15
+      pause:
+        minutes: 2
+      #wait_for:
+        #port: 22
+        #delay: 15
         #timeout: 300
 
 - hosts: all
@@ -46,10 +46,10 @@
   roles:
     - { role: mongo-rpl, count: "{{ shard_count }}", replicas: "{{ replica_count }}" }
 
-#- hosts: mongos
-  #name: Create Sharded set
-  #user: ubuntu
-  #become: true
-  #gather_facts: true
-  #roles:
-    #- { role: mongos }
+- hosts: mongos
+  name: Create Sharded set
+  user: ubuntu
+  become: true
+  gather_facts: true
+  roles:
+    - { role: mongos, config_port: 27016, mongos_port: 27017 }

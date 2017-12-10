@@ -1,0 +1,24 @@
+---
+- name: Create data directory for mongos
+  file: path=/var/lib/mongodb/mongos state=directory owner=mongodb group=mongodb
+
+- name: Create the mongos startup file
+  template: src=mongos.service.j2 dest=/etc/systemd/system/mongos.service mode=0655
+
+- name: Create the mongos configuration file
+  template: src=mongos.conf.j2 dest=/etc/mongos.conf
+
+- name: Start the mongos service
+  systemd: name=mongos state=started daemon_reload=yes enabled=yes
+
+#- wait_for:
+#    port: "{{ mongos_port }}"
+#    delay: 3
+
+- name: Copy the file enable sharding
+  template: src=mongos_init.js.j2 dest=/tmp/mongos_init.js
+  when: "inventory_hostname == groups['mongos'][0]"
+
+- name: Create sharding
+  shell: /usr/bin/mongo "localhost:{{ mongos_port }}" /tmp/mongos_init.js
+  when: "inventory_hostname == groups['mongos'][0]"
